@@ -25,66 +25,103 @@ const string ADMIN_PASSWORD = "admin123";
 const string USER_USERNAME = "user";
 const string USER_PASSWORD = "user123";
 
-bool valid_password(const string& pass_wrd)
-{
-	regex pass(R"(^[a-zA-Z0-9]{3}[^a-zA-Z0-9]{1}\d{2}$)");
-	return regex_match(pass_wrd,pass);
-}
-bool valid_email(const string& eml)
-{
-	regex email(R"(^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)");
-	return regex_match(eml,email);
+// Helper functions for validation
+bool isValidPassword(const string& password) {
+    regex pattern(R"(^[a-zA-Z0-9]{3}[^a-zA-Z0-9]{1}\d{2}$)");
+    return regex_match(password, pattern);
 }
 
-class sign_up{
-	protected:
-		string full_name; // full_name of sign_up person 
-		char user_name[100]; //user_name of sign_up person
-		char password[100]; //user password 
-		string email_address;//email address of sign_up person 
-		string s_question;
-		int earn;
-	public:
-		sign_up()
-		 {
-		 	full_name="";
-			strcpy(user_name,"");
-			strcpy(password,""); 
-			email_address="";
-			s_question="";
-		 }
-		sign_up(string f_name, const char* u_name, const char* pass, string eml_add ,string s_quest)
-		 {
-		    full_name=f_name;
-			strcpy(user_name, u_name);
-            strcpy(password, pass);
-			email_address=eml_add;
-			s_question=s_quest;
-		 }
-		 void saveToFile()
-		 {
-		 	fstream signup_file;
-			signup_file.open("account.txt",ios::out|ios::app);
-			if(signup_file.is_open())
-			{
-				signup_file<<"\t\t\t\t\tInformation of Home_owner"<<endl;
-			   	signup_file<<full_name<<endl;
-			 	signup_file<<user_name<<endl;
-			 	signup_file<<password<<endl;
-			 	signup_file<<email_address<<endl;
-			 	signup_file<<s_question<<endl<<endl;
-			 	system("cls");
-			 	cout<<"\t\t\t\t\tSIGNUP sucessflly!!!";
-			 	Sleep(2000);
-			 	system("cls");
-				signup_file.close();
-			}
-			else
-			{
-				cout<<"\t\t\t\t\tfile not created !!";
-			}	
-		  } 
-				 
+bool isValidEmail(const string& email) {
+    regex pattern(R"(^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)");
+    return regex_match(email, pattern);
+}
+
+// SignUp Class
+class SignUp {
+private:
+    string fullName;
+    string username;
+    string password;
+    string email;
+    string securityQuestion;
+
+public:
+    SignUp() = default;
+
+    void collectUserInfo() {
+        cout << "\n--- Sign Up ---\n";
+        cin.ignore();
+        cout << "Enter full name: ";
+        getline(cin, fullName);
+        cout << "Enter username: ";
+        getline(cin, username);
+
+        while (true) {
+            cout << "Enter password (3 alphanumeric + 1 special character + 2 digits): ";
+            getline(cin, password);
+            if (isValidPassword(password)) break;
+            cout << "Invalid password format. Try again.\n";
+        }
+
+        while (true) {
+            cout << "Enter email: ";
+            getline(cin, email);
+            if (isValidEmail(email)) break;
+            cout << "Invalid email format. Try again.\n";
+        }
+
+        cout << "What is your favorite game? (for account recovery): ";
+        getline(cin, securityQuestion);
+    }
+
+    void saveToFile() const {
+        ofstream file("accounts.txt", ios::app);
+        if (file.is_open()) {
+            file << "Full Name: " << fullName << "\n"
+                 << "Username: " << username << "\n"
+                 << "Password: " << password << "\n"
+                 << "Email: " << email << "\n"
+                 << "Security Question: " << securityQuestion << "\n\n";
+            file.close();
+            cout << "Account created successfully!\n";
+        } else {
+            cout << "Error: Unable to open file for saving.\n";
+        }
+    }
+};
+
+// Login Class
+class Login {
+private:
+    string username;
+    string password;
+
+public:
+    Login(string uname, string pass) : username(uname), password(pass) {}
+
+    bool authenticate() {
+        ifstream file("accounts.txt");
+        if (!file.is_open()) {
+            cout << "Error: Unable to open file.\n";
+            return false;
+        }
+
+        string line;
+        string storedUsername, storedPassword;
+        while (getline(file, line)) {
+            if (line.find("Username:") != string::npos) {
+                storedUsername = line.substr(line.find(":") + 2);
+            } else if (line.find("Password:") != string::npos) {
+                storedPassword = line.substr(line.find(":") + 2);
+                if (storedUsername == username && storedPassword == password) {
+                    file.close();
+                    return true;
+                }
+            }
+        }
+        file.close();
+        return false;
+    }
 };
 
 
@@ -382,15 +419,14 @@ void mainMenu(vector<Book>& books) {
 			fflush(stdin);
             if (loginOption == 1) {
             	system("cls");
+            	cout<<"============admin login============"<<endl<<endl;
                 string username, password;
                 cout << "Enter Admin Username: ";
-                cin >> username;
+                getline(cin, username);
                 fflush(stdin);
                 cout << "Enter Admin Password: ";
-                cin >> password;
-                fflush(stdin);
-
-                if (username == ADMIN_USERNAME && password == ADMIN_PASSWORD) {
+                getline(cin, password);
+				 if (username == ADMIN_USERNAME && password == ADMIN_PASSWORD) {
                 	system("cls");
                     cout << "Welcome, Admin!\n";
                     cout<<endl<<"press any key to continue: ";
@@ -401,28 +437,28 @@ void mainMenu(vector<Book>& books) {
                     cout << "Invalid Admin credentials.\n";
                     cout<<endl<<"press any key to continue: ";
 					getch();
-                }
-            } else if (loginOption == 2) {
+                }            
+            } 
+			else if (loginOption == 2) 
+			{
                 string username, password;
                 system("cls");
                 cout << "Enter Customer Username: ";
-                cin >> username;
+                getline(cin, username);
+                
                 fflush(stdin);
                 cout << "Enter Customer Password: ";
-                cin >> password;
+                getline(cin, password);
                 fflush(stdin);
-
-                if (username == USER_USERNAME && password == USER_PASSWORD) {
-                    system("cls");
-					cout << "Welcome, User!\n";
-					cout<<endl<<"press any key to continue: ";
-            		getch();
-                    userMenu(books);
-                } else {
-                    cout << "Invalid Customer credentials.\n";
-                    cout<<endl<<"press any key to continue: ";
-            getch();
-                }
+				Login userLogin(username, password);
+				if (userLogin.authenticate()) {
+                	cout << "Login successful!\n";
+                	getch();
+                	userMenu(books);
+            	} 
+				else {
+                	cout << "Invalid username or password. Try again.\n";
+            	}   
             }
         } 
 		else if (option == 2) {
@@ -434,57 +470,13 @@ void mainMenu(vector<Book>& books) {
             cout << "Enter your choice: ";
             cin >> createOption;
             fflush(stdin);
+            
             if (createOption == 1)
 			{
-				signup:
-				system("cls");
-                // Add logic for creating a customer account
-                string fullName,email,recover_qn; 
-	 			char username[100],password[100];
-				cout<<"\n\n\t\t\t\t\tCreate account"<<endl;
-				cin.ignore();
-				cout<<"\t\t\t\t\tFull name:";
-				getline(cin,fullName);
-				cout<<"\t\t\t\t\tUser name:";
-				cin.getline(username,100);
-        	    getch();
-        	    while(true)
-        	    {
-        	    	cout<<"\t\t\t\t\tPassword:";
-		 	    	cin.getline(password,100);
-		 	    	if(valid_password(password))
-		 	        {
-		 	         	break;
-					}
-					else
-					{
-					 	cout<<"\t\t\t\t\tpassword format not match!!\n";
-					 	getch();
-					 	goto signup;
-					}
-				}
-				
-				while(true)
-				{
-					cout<<"\t\t\t\t\tEmail address:";
-		 	    	getline(cin,email);
-		 	    	if(valid_email(email))
-		 	     	{
-		 	     		break;
-				  	}
-					else
-					{
-				 		cout<<"\t\t\t\t\tInvalid email address!!\n";
-					}	
-		    	}
-		    	cout<<"\t\t\t\t\tWhat is your favourite game?";
-		 		getline(cin,recover_qn);
-		 		sign_up obj_1(fullName, username, password, email,recover_qn);
-		 		obj_1.saveToFile();
-		 		
-				goto mainmenu;
+				SignUp newUser;
+            	newUser.collectUserInfo();
+            	newUser.saveToFile();
             }
-            
             
             
         }
