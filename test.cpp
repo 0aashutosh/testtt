@@ -21,6 +21,7 @@ struct signup {
     int passkey;
 } user, owner;
 
+
 int userMenu();
 int adminMenu();
 void addBook();
@@ -28,6 +29,11 @@ void searchBook();
 void displayAllBooks();
 void borrowBook();
 void returnBook();
+
+
+void setColor(int color) {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
 
 bool isIDUnique(int id)
 {
@@ -50,6 +56,7 @@ int main() {
     int choice;
 	main:
     system("cls");
+    setColor(14);
     cout << "Main Menu" << endl << endl;
     cout << "1. Login" << endl;
     cout << "2. Create Account" << endl;
@@ -63,6 +70,7 @@ int main() {
         int loginchoice;
     	login:
         system("cls");
+        setColor(14);
         cout << "Login Menu" << endl << endl;
         cout << "1. Admin" << endl;
         cout << "2. Customer" << endl;
@@ -84,12 +92,14 @@ int main() {
             gets(ckpass);
             ifstream ptr("owner.txt", ios::binary);
             if (!ptr) {
+            	setColor(12);
                 cerr << "Error opening file!" << endl;
                 return 1;
             }
             while (ptr.read(reinterpret_cast<char*>(&owner), sizeof(signup))) {
                 if (strcmp(owner.username, ckusername) == 0 && strcmp(owner.password, ckpass) == 0) {
                     flag = 1;
+                    setColor(10);
                     cout << "Login successful" << endl;
                     getch();
                     ptr.close();
@@ -98,6 +108,7 @@ int main() {
                 }
             }
             if (!flag) {
+            	setColor(12);
                 cout << "Invalid credentials. Try again." << endl;
                 getch();
                 goto adminlogin;
@@ -110,7 +121,8 @@ int main() {
             char ckpass[50];
             int flag = 0, log = 0;
             system("cls");
-        userlogin:
+        	userlogin:
+        	setColor(14);
             fflush(stdin);
             cout << "Enter Username: ";
             gets(ckusername);
@@ -119,12 +131,14 @@ int main() {
             gets(ckpass);
             ifstream ptr("user.txt", ios::binary);
             if (!ptr) {
+            	setColor(12);
                 cerr << "Error opening file!" << endl;
                 return 1;
             }
             while (ptr.read(reinterpret_cast<char*>(&user), sizeof(signup))) {
                 if (strcmp(user.username, ckusername) == 0 && strcmp(user.password, ckpass) == 0) {
                     flag = 1;
+					setColor(10);
                     cout << "Login successful" << endl;
                     getch();
                     ptr.close();
@@ -136,6 +150,7 @@ int main() {
                 }
             }
             if (!flag) {
+            	setColor(12);
                 cout << "Invalid credentials. Try again." << endl;
                 getch();
                 goto userlogin;
@@ -147,6 +162,7 @@ int main() {
             goto main;
 
         default:
+        	setColor(12);
             cout << "Enter valid Choice!!";
             getch();
                 // Clear error flags and ignore invalid input
@@ -161,6 +177,7 @@ int main() {
         int createaccchoice;
     createacc:
         system("cls");
+        setColor(14);
         cout << "Create Account Menu" << endl << endl;
         cout << "1. Admin" << endl;
         cout << "2. Customer" << endl;
@@ -172,6 +189,7 @@ int main() {
             char ckpass[50];
             fstream inFile("owner.txt");
             if (inFile.read(reinterpret_cast<char*>(&owner), sizeof(signup))) {
+            	setColor(12);
                 cout << "Admin already exists!!";
                 getch();
                 goto main;
@@ -179,6 +197,7 @@ int main() {
             inFile.close();
         signupmenu1:
             system("cls");
+            setColor(14);
             cout << "\n\n\t\t\t\t\tSIGNUP FORM FOR ADMIN\n\n" << endl;
             fflush(stdin);
             cout << "Enter Your Full Name: ";
@@ -194,6 +213,7 @@ int main() {
             gets(ckpass);
             fflush(stdin);
             if (strcmp(ckpass, owner.password) != 0) {
+            	setColor(12);
                 cout << "Both passwords should match!";
                 getch();
                 goto signupmenu1;
@@ -203,6 +223,7 @@ int main() {
             cin >> owner.contactnumber;
             fflush(stdin);
             if (owner.contactnumber < 9700000000 || owner.contactnumber > 9899999999) {
+            	setColor(12);
                 cout << "Contact length is not correct!";
                 getch();
                 goto signupmenu1;
@@ -213,11 +234,14 @@ int main() {
 
             ofstream outFile("owner.txt", ios::app | ios::binary);
             if (!outFile) {
+            	setColor(12);
                 cout << "Error: Unable to open file for writing!\n";
                 return 1;
             }
             outFile.write(reinterpret_cast<char*>(&owner), sizeof(signup));
+            setColor(12);
             cout << endl << "Signup Successful";
+            setColor(14);
             getch();
             outFile.close();
             goto main;
@@ -228,6 +252,7 @@ int main() {
             char ckpass[50];
         signupmenu:
             system("cls");
+            setColor(14);
             fflush(stdin);
             cout << "\n\n\t\t\t\t\tSIGNUP FORM FOR CUSTOMER\n\n" << endl;
             cout << "Enter Your Full Name: ";
@@ -243,6 +268,7 @@ int main() {
             gets(ckpass);
             fflush(stdin);
             if (strcmp(ckpass, user.password) != 0) {
+            	setColor(12);
                 cout << "Both passwords should match!";
                 getch();
                 goto signupmenu;
@@ -251,6 +277,7 @@ int main() {
             cout << "Enter Your Phone number: ";
             cin >> user.contactnumber;
             if (user.contactnumber < 9700000000 || user.contactnumber > 9899999999) {
+            	setColor(12);
                 cout << "Contact length is not correct!";
                 getch();
                 goto signupmenu;
@@ -261,10 +288,12 @@ int main() {
 
             ofstream outFile("user.txt", ios::app | ios::binary);
             if (!outFile) {
+            	setColor(12);
                 cout << "Error: Unable to open file for writing!\n";
                 return 1;
             }
             outFile.write(reinterpret_cast<char*>(&user), sizeof(signup));
+            setColor(10);
             cout << endl << "Signup Successful";
             getch();
             outFile.close();
@@ -276,6 +305,7 @@ int main() {
             goto main;
 
         default:
+        	setColor(12);
             cout << "Enter valid Choice!!";
             getch();
                 // Clear error flags and ignore invalid input
@@ -285,11 +315,13 @@ int main() {
         }
 
     case 3:
+    	setColor(10);
         cout << "Thank you for using this program!";
         getch();
         exit(0);
 
     default:{
+    	setColor(12);
     	cout << "Enter valid Choice!!";
         getch();
                 // Clear error flags and ignore invalid input
@@ -308,11 +340,12 @@ int adminMenu() {
 adminmenu:
     system("cls");
     fflush(stdin);
+    setColor(14);
     cout << "\nAdmin Menu\n";
     cout << "1. Add Book\n";
     cout << "2. Search Book\n";
     cout << "3. Display All Books\n";
-    cout << "4. Return to Main Menu\n";
+    cout << "4. Log Out\n";
     cout << "Enter your choice: ";
     cin >> choice;
     fflush(stdin);
@@ -329,6 +362,7 @@ adminmenu:
     case 4:
         return 1;
     default:
+    	setColor(12);
         cout << "Invalid Option! Please enter a valid option.";
         getch();
             // Clear error flags and ignore invalid input
@@ -344,12 +378,13 @@ int userMenu() {
 usermenu:
     system("cls");
     fflush(stdin);
+    setColor(14);
     cout << "\nUser Menu\n";
     cout << "1. Search Book\n";
     cout << "2. Display All Books\n";
     cout << "3. Borrow Book\n";
     cout << "4. Return Book\n";
-    cout << "5. Return to Main Menu\n";
+    cout << "5. Log Out\n";
     cout << "Enter your choice: ";
     fflush(stdin);
     cin >> choice;
@@ -368,11 +403,14 @@ usermenu:
         goto usermenu;
     case 5:
         system("cls");
+        setColor(10);
         cout << "You have been logged out";
         getch();
         return 1;
     default:
+    	setColor(12);
         cout << endl << "Invalid Option! Please enter a valid option.";
+        setColor(14);
         cout << endl << "Press any key to continue";
         getch();
             // Clear error flags and ignore invalid input
@@ -388,10 +426,12 @@ void addBook() {
     addbook:
     system("cls");
     fflush(stdin);
+    setColor(14);
     cout << "Enter Book ID: ";
     cin >> newBook.id;
     if (!isIDUnique(newBook.id)) 
 	{
+		setColor(12);
         cout << "Error: Book ID is not unique! Try again.\n";
         getch();
         goto addbook;
@@ -406,23 +446,28 @@ void addBook() {
 
     ofstream outFile("books.txt", ios::app | ios::binary);
     if (!outFile) {
+    	setColor(12);
         cout << "Error: Unable to open file for writing!\n";
         return;
     }
     outFile.write(reinterpret_cast<char*>(&newBook), sizeof(book));
     outFile.close();
+    setColor(10);
     cout << "Book added successfully!";
+    setColor(14);
     getch();
 }
 
 void searchBook() {
     int searchId;
     system("cls");
+    setColor(14);
     cout << "Enter Book ID to search: ";
     cin >> searchId;
 
     ifstream inFile("books.txt", ios::binary);
     if (!inFile) {
+    	setColor(12);
         cout << "Error: Unable to open file for reading!\n";
         return;
     }
@@ -431,6 +476,7 @@ void searchBook() {
     bool found = false;
     while (inFile.read(reinterpret_cast<char*>(&tempBook), sizeof(book))) {
         if (tempBook.id == searchId) {
+//        	setColor(14);
             cout << "Book ID: " << tempBook.id << endl;
             cout << "Book Title: " << tempBook.title << endl;
             cout << "Book Author: " << tempBook.author << endl;
@@ -441,19 +487,23 @@ void searchBook() {
     }
     inFile.close();
     if (!found) {
+    	setColor(12);
         cout << "Book not found!";
     }
     getch();
 }
 
 void displayAllBooks() {
+	system("cls");
     ifstream inFile("books.txt", ios::binary);
     if (!inFile) {
+    	setColor(12);
         cout << "Error: Unable to open file for reading!\n";
         return;
     }
 
     book tempBook;
+    setColor(1);
     while (inFile.read(reinterpret_cast<char*>(&tempBook), sizeof(book))) {
         cout << "Book ID: " << tempBook.id << endl;
         cout << "Book Title: " << tempBook.title << endl;
@@ -467,12 +517,15 @@ void displayAllBooks() {
 
 void borrowBook() {
     int borrowId;
+    setColor(14);
     cout << "Enter Book ID to borrow: ";
     cin >> borrowId;
 
     fstream file("books.txt", ios::in | ios::out | ios::binary);
     if (!file) {
+    	setColor(12);
         cout << "Error: Unable to open file!\n";
+        setColor(14);
         return;
     }
 
@@ -484,6 +537,7 @@ void borrowBook() {
             int pos = -1 * static_cast<int>(sizeof(book));
             file.seekp(pos, ios::cur);
             file.write(reinterpret_cast<char*>(&tempBook), sizeof(book));
+            setColor(10);
             cout << "Book borrowed successfully!";
             found = true;
             break;
@@ -491,6 +545,7 @@ void borrowBook() {
     }
     file.close();
     if (!found) {
+    	setColor(12);
         cout << "Book not available for borrowing!";
     }
     getch();
@@ -498,11 +553,13 @@ void borrowBook() {
 
 void returnBook() {
     int returnId;
+    setColor(14);
     cout << "Enter Book ID to return: ";
     cin >> returnId;
 
     fstream file("books.txt", ios::in | ios::out | ios::binary);
     if (!file) {
+    	setColor(12);
         cout << "Error: Unable to open file!\n";
         return;
     }
@@ -515,13 +572,15 @@ void returnBook() {
             int pos = -1 * static_cast<int>(sizeof(book));
             file.seekp(pos, ios::cur);
             file.write(reinterpret_cast<char*>(&tempBook), sizeof(book));
-            cout << "Book returned successfully!";
+            setColor(10);
+			cout << "Book returned successfully!";
             found = true;
             break;
         }
     }
     file.close();
     if (!found) {
+    	setColor(12);
         cout << "Book not found or already returned!";
     }
     getch();
