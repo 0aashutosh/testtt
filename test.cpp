@@ -239,7 +239,7 @@ int main() {
                 return 1;
             }
             outFile.write(reinterpret_cast<char*>(&owner), sizeof(signup));
-            setColor(12);
+            setColor(10);
             cout << endl << "Signup Successful";
             setColor(14);
             getch();
