@@ -56,7 +56,7 @@ int main() {
     int choice;
 	main:
     system("cls");
-    setColor(14);
+    setColor(7);
     cout << "Main Menu" << endl << endl;
     cout << "1. Login" << endl;
     cout << "2. Create Account" << endl;
@@ -70,7 +70,7 @@ int main() {
         int loginchoice;
     	login:
         system("cls");
-        setColor(14);
+        setColor(7);
         cout << "Login Menu" << endl << endl;
         cout << "1. Admin" << endl;
         cout << "2. Customer" << endl;
@@ -122,7 +122,7 @@ int main() {
             int flag = 0, log = 0;
             system("cls");
         	userlogin:
-        	setColor(14);
+        	setColor(7);
             fflush(stdin);
             cout << "Enter Username: ";
             gets(ckusername);
@@ -177,7 +177,7 @@ int main() {
         int createaccchoice;
     createacc:
         system("cls");
-        setColor(14);
+        setColor(7);
         cout << "Create Account Menu" << endl << endl;
         cout << "1. Admin" << endl;
         cout << "2. Customer" << endl;
@@ -197,7 +197,7 @@ int main() {
             inFile.close();
         signupmenu1:
             system("cls");
-            setColor(14);
+            setColor(7);
             cout << "\n\n\t\t\t\t\tSIGNUP FORM FOR ADMIN\n\n" << endl;
             fflush(stdin);
             cout << "Enter Your Full Name: ";
@@ -241,7 +241,7 @@ int main() {
             outFile.write(reinterpret_cast<char*>(&owner), sizeof(signup));
             setColor(10);
             cout << endl << "Signup Successful";
-            setColor(14);
+            setColor(7);
             getch();
             outFile.close();
             goto main;
@@ -252,7 +252,7 @@ int main() {
             char ckpass[50];
         signupmenu:
             system("cls");
-            setColor(14);
+            setColor(7);
             fflush(stdin);
             cout << "\n\n\t\t\t\t\tSIGNUP FORM FOR CUSTOMER\n\n" << endl;
             cout << "Enter Your Full Name: ";
@@ -340,7 +340,7 @@ int adminMenu() {
 adminmenu:
     system("cls");
     fflush(stdin);
-    setColor(14);
+    setColor(7);
     cout << "\nAdmin Menu\n";
     cout << "1. Add Book\n";
     cout << "2. Search Book\n";
@@ -378,7 +378,7 @@ int userMenu() {
 usermenu:
     system("cls");
     fflush(stdin);
-    setColor(14);
+    setColor(7);
     cout << "\nUser Menu\n";
     cout << "1. Search Book\n";
     cout << "2. Display All Books\n";
@@ -410,7 +410,7 @@ usermenu:
     default:
     	setColor(12);
         cout << endl << "Invalid Option! Please enter a valid option.";
-        setColor(14);
+        setColor(7);
         cout << endl << "Press any key to continue";
         getch();
             // Clear error flags and ignore invalid input
@@ -426,7 +426,7 @@ void addBook() {
     addbook:
     system("cls");
     fflush(stdin);
-    setColor(14);
+    setColor(7);
     cout << "Enter Book ID: ";
     cin >> newBook.id;
     if (!isIDUnique(newBook.id)) 
@@ -454,14 +454,14 @@ void addBook() {
     outFile.close();
     setColor(10);
     cout << "Book added successfully!";
-    setColor(14);
+    setColor(7);
     getch();
 }
 
 void searchBook() {
     int searchId;
     system("cls");
-    setColor(14);
+    setColor(7);
     cout << "Enter Book ID to search: ";
     cin >> searchId;
 
@@ -476,7 +476,7 @@ void searchBook() {
     bool found = false;
     while (inFile.read(reinterpret_cast<char*>(&tempBook), sizeof(book))) {
         if (tempBook.id == searchId) {
-//        	setColor(14);
+//        	setColor(7);
             cout << "Book ID: " << tempBook.id << endl;
             cout << "Book Title: " << tempBook.title << endl;
             cout << "Book Author: " << tempBook.author << endl;
@@ -517,7 +517,7 @@ void displayAllBooks() {
 
 void borrowBook() {
     int borrowId;
-    setColor(14);
+    setColor(7);
     cout << "Enter Book ID to borrow: ";
     cin >> borrowId;
 
@@ -525,7 +525,7 @@ void borrowBook() {
     if (!file) {
     	setColor(12);
         cout << "Error: Unable to open file!\n";
-        setColor(14);
+        setColor(7);
         return;
     }
 
@@ -553,7 +553,7 @@ void borrowBook() {
 
 void returnBook() {
     int returnId;
-    setColor(14);
+    setColor(7);
     cout << "Enter Book ID to return: ";
     cin >> returnId;
 
