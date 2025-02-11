@@ -3,6 +3,7 @@
 #include <fstream>
 #include <conio.h>
 #include <windows.h>
+#include <limits>
 using namespace std;
 
 struct book {
@@ -148,6 +149,9 @@ int main() {
         default:
             cout << "Enter valid Choice!!";
             getch();
+                // Clear error flags and ignore invalid input
+        	cin.clear();
+        	cin.ignore(numeric_limits<streamsize>::max(), '\n');
             goto login;
     
 	    }
@@ -274,6 +278,9 @@ int main() {
         default:
             cout << "Enter valid Choice!!";
             getch();
+                // Clear error flags and ignore invalid input
+        	cin.clear();
+        	cin.ignore(numeric_limits<streamsize>::max(), '\n');
             goto createacc;
         }
 
@@ -285,6 +292,9 @@ int main() {
     default:{
     	cout << "Enter valid Choice!!";
         getch();
+                // Clear error flags and ignore invalid input
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         goto main;
 		break;
 	}
@@ -321,6 +331,9 @@ adminmenu:
     default:
         cout << "Invalid Option! Please enter a valid option.";
         getch();
+            // Clear error flags and ignore invalid input
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         goto adminmenu;
     }
     return 0;
@@ -362,6 +375,9 @@ usermenu:
         cout << endl << "Invalid Option! Please enter a valid option.";
         cout << endl << "Press any key to continue";
         getch();
+            // Clear error flags and ignore invalid input
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         goto usermenu;
     }
     return 0;
